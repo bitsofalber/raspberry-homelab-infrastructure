@@ -1,12 +1,6 @@
----
-
-# docker-compose.yml 
-
-```yaml
-version: "3.8"
 
 services:
-  telegram-bot:
+  telegram-community-bot:
     build: .
     container_name: telegram-community-bot
     restart: unless-stopped
