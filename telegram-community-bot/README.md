@@ -1,4 +1,4 @@
-Telegram Community Bot
+## Telegram Community Bot
 
 Self-hosted Telegram automation bot designed for scalable community management, monitoring and engagement.
 
