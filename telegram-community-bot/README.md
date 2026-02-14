@@ -135,7 +135,7 @@ Help Commands
   <img src="docs/screenshots/help.png" width="450">
 </p>
 
-Learning Outcomes
+## Learning Outcomes
 
 This project demonstrates:
 	•	Containerized Python application deployment
@@ -145,7 +145,7 @@ This project demonstrates:
 	•	Infrastructure-level thinking for small-scale systems
 	•	DevOps-oriented documentation
 
-Part of
+## Part of
 
 Raspberry Homelab Infrastructure
 Self-hosted secure services running on ARM-based hardware.
