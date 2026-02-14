@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+
+    ports:
+      - "127.0.0.1:8085:80"
+
+    volumes:
+      - ./data:/data
+
+    environment:
+      WEBSOCKET_ENABLED: "true"
+      SIGNUPS_ALLOWED: "false"
+      INVITATIONS_ALLOWED: "false"
+      ADMIN_TOKEN: "${ADMIN_TOKEN}"
+      LOG_LEVEL: "info"
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
