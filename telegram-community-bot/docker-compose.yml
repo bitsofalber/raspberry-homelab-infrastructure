@@ -1,0 +1,24 @@
+---
+
+# docker-compose.yml 
+
+```yaml
+version: "3.8"
+
+services:
+  telegram-bot:
+    build: .
+    container_name: telegram-community-bot
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./data:/app/data
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
