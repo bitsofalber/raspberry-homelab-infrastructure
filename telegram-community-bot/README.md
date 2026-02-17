@@ -44,7 +44,12 @@ Built with a DevOps + SysAdmin mindset.
 - Warning system for moderation
 - `/announce` admin announcements (optional pin)
 - `/top` active users ranking
-
+- `/pc` → Sends Wake-on-LAN packet to power on Windows machine
+- `/pc_status` → Checks if the Windows PC is online via ICMP ping
+- Restricted to ADMIN_ID only
+- Executed from Raspberry Pi container environment
+- Integrated with local network (LAN-only control)
+  
 ---
 
 ###  Engagement & Analytics
@@ -134,6 +139,42 @@ Help Commands
 <p align="center">
   <img src="docs/screenshots/help.png" width="450">
 </p>
+
+
+---
+
+## 🖥 Remote Power Control (Wake-on-LAN Integration)
+
+The bot includes infrastructure-level control capabilities allowing remote power management of a Windows machine inside the local network.
+
+### Architecture
+
+Telegram User  
+→ Telegram Bot (Docker container on Raspberry Pi)  
+→ Wake-on-LAN packet (LAN broadcast)  
+→ Windows PC  
+
+### Commands
+
+- `/pc` → Sends WOL packet to power on the machine
+- `/pc_status` → Checks availability via ICMP ping
+
+### Security Controls
+
+- Command restricted to `ADMIN_ID`
+- No public exposure
+- LAN-only broadcast
+- Executed inside isolated container
+- No SSH exposure required
+
+### Implementation Notes
+
+- Uses `wakeonlan` system package
+- Uses `ping` for status verification
+- Docker container runs as non-root user
+- Secrets managed via `.env`
+
+This demonstrates lightweight infrastructure orchestration through Telegram as a secure control interface.
 
 ## Learning Outcomes
 
