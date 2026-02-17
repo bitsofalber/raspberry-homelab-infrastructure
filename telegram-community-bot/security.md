@@ -17,3 +17,8 @@ Uses outbound API polling only.
 ## Limitations
 SQLite not ideal for horizontal scaling.
 Single-node design.
+
+## WOL - Sec
+- Remote power control restricted to ADMIN_ID
+- No direct OS-level SSH exposure for power operations
+- Wake-on-LAN limited to internal network broadcast
