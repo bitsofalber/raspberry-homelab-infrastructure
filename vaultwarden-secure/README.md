@@ -1,93 +1,65 @@
-# Vaultwarden Secure Deployment (Raspberry Pi)
+# 🔐 Vaultwarden Secure Deployment
 
-Self-hosted Bitwarden-compatible password manager deployed securely on Raspberry Pi using Docker and VPN-only access.
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Security](https://img.shields.io/badge/Security-Hardened-red?style=for-the-badge&logo=guardant&logoColor=white)
+![VPN](https://img.shields.io/badge/Access-VPN_Only-000000?style=for-the-badge&logo=tailscale&logoColor=white)
+![Platform](https://img.shields.io/badge/Hardware-Raspberry_Pi-C51A4A?style=for-the-badge&logo=raspberry-pi&logoColor=white)
 
----
-
-## Objective
-
-Deploy a production-style password manager with:
-
-- Zero public exposure
-- VPN-only access (Tailscale)
-- Container hardening
-- 2FA enforcement
-- Automated off-site encrypted backups
-- Telegram alerting integration
+Despliegue de un gestor de contraseñas compatible con Bitwarden (Vaultwarden) en una infraestructura **Raspberry Pi**, bajo un modelo de **Zero Public Exposure**. Este proyecto se enfoca en la máxima privacidad y el endurecimiento de contenedores.
 
 ---
 
-## Architecture
-
-Client Device  
-→ Tailscale VPN  
-→ Raspberry Pi  
-→ Docker container (Vaultwarden)  
-→ SQLite database (persistent volume)
-
-Service bound to localhost and exposed securely through Tailscale HTTPS serve.
+## 🎯 Objetivos del Despliegue
+* **Privacidad Total:** Acceso exclusivo mediante **Tailscale VPN**.
+* **Seguridad Ofensiva:** Implementación de políticas contra el escalado de privilegios.
+* **Resiliencia:** Backups automatizados y cifrados fuera del sitio (Off-site).
+* **Monitorización:** Integración con Telegram para alertas de estado y backups.
 
 ---
 
-## Deployment
+## 🏗️ Arquitectura del Sistema
+El flujo de conexión garantiza que el servicio nunca sea visible desde el internet público:
+
+```text
+Dispositivo Cliente 🛡️ ↔️ Tailscale VPN ↔️ Raspberry Pi (Localhost)
+                                        ↳ Docker (Vaultwarden)
+                                        ↳ SQLite (Volumen Persistente)
+```
+
+Nota técnica: El servicio está bindeado a 127.0.0.1 y expuesto de forma segura mediante Tailscale HTTPS.
+
+## 🔒 Controles de Seguridad (Hardening)
+
+| Área        | Medidas aplicadas |
+|------------|------------------|
+| **Red**    | Zero Public Ports, Localhost binding, Fail2Ban activo |
+| **Acceso** | VPN-only, SSH Key-only, Registro de nuevos usuarios deshabilitado |
+| **Contenedor** | `cap_drop` (todas), `no-new-privileges` habilitado |
+| **Gestión** | Admin Token requerido, Enforce 2FA |
+
+🚀 Despliegue y Mantenimiento
+
+Levantamiento del Stack
 
 ```bash
 cd docker
 docker compose up -d
+```
+Acceso mediante: https://hostname.tailnet.ts.net
 
--- 
+## Estrategia de Backup
 
-Accedes mediante: https://hostname.tailnet.ts.net
+Frecuencia: Copia de seguridad automatizada cada noche (Tar).
+Transferencia: Envío seguro vía SCP a dispositivo externo.
+Alerting: Notificación instantánea de éxito/error vía Telegram.
+Limpieza: Política automática de retención de copias antiguas.
 
---
+## 📈 Roadmap de Mejoras (Future Work)
 
-Security Controls
-	•	No public ports exposed
-	•	Localhost binding (127.0.0.1)
-	•	VPN-only access
-	•	Signups disabled
-	•	Admin token required
-	•	Container capability dropping
-	•	no-new-privileges enabled
-	•	SSH key-only authentication
-	•	Fail2Ban active
+[ ] Cifrado de backups mediante GPG.
+[ ] Verificación de integridad de backups (Hash verification).
+[ ] Implementación de Infraestructura como Código (IaC).
+[ ] Refinamiento en la gestión dinámica de secretos.
 
+[⬅️ Volver al proyecto](./README.md)
 
-
-Backup Strategy
-	•	Nightly automated tar backup
-	•	Secure transfer via SCP to external device
-	•	Telegram success/failure notification
-	•	Local retention cleanup policy
-
-
-
-Threat Model
-
-Attack Surface
-	•	VPN compromise
-	•	Stolen trusted device
-	•	Backup failure
-	•	Container escape
-
-
-
-Mitigation
-	•	Tailscale private mesh
-	•	2FA enabled
-	•	Off-device backups
-	•	Strict SSH configuration
-	•	Minimal container privileges
-
-
-
-Future Improvements
-	•	GPG encrypted backups
-	•	Backup integrity hash verification
-	•	Reverse proxy with TLS termination
-	•	Infrastructure as Code
-	•	Secret management refinement
-
-
-Author: Alberto Hidalgo Moreno
-Focus: Cybersecurity | DevSecOps | Infrastructure Hardening
